@@ -1,9 +1,17 @@
-import Head from "next/head";
 import Image from "next/image";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-
+import TerminalWindow from "/src/components/ui/TerminalWindow.tsx";
 export default function Home() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <div className="h-screen grid place-items-center">
+      <TerminalWindow />
+      <Image
+        src="/wallpapers/Sonoma.jpg"
+        fill
+        sizes="100vw"
+        alt="background image"
+        objectFit="cover"
+        className="-z-10"
+      />
+    </div>
+  );
 }
