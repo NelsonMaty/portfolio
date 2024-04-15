@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import BasePrompt from "./BasePrompt";
 
 interface TerminalInputProp {
   onCommandEntered: (cmd: string) => void;
@@ -15,17 +16,14 @@ export default function TerminalInput({ onCommandEntered }: TerminalInputProp) {
   }
 
   return (
-    <div id="terminal__prompt">
-      <div id="terminal__prompt--location">~</div>
-      <span id="terminal__prompt--bling">$</span>
-      <span id="terminal__prompt--cursor"></span>
-      <form onSubmit={handleSubmit}>
+    <BasePrompt>
+      <form onSubmit={handleSubmit} className="inline">
         <input
           autoFocus
           className="bg-inherit focus:outline-none"
           ref={inputRef}
         />
       </form>
-    </div>
+    </BasePrompt>
   );
 }

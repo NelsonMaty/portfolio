@@ -70,10 +70,20 @@ export default function TerminalWindow() {
     const [commandHistory, setCommandHistory] = useState([]);
 
     const handleCommandEntered = function (userCommand: string) {
-      setCommandHistory((currentHistory: string[]) => {
-        const result = [...currentHistory, userCommand];
-        return result;
-      });
+      const calculateCommandResult = (command: string) => {
+        const results = {
+          ls: "retorno lista de archivos",
+          cd: "redirecciona al directorio",
+          cat: "muestra el contenido de un archivo",
+        };
+        return results[command] || "Comando no encontrado";
+      };
+
+      const userCommandResult = calculateCommandResult(userCommand);
+      setCommandHistory((currentHistory: string[]) => [
+        ...currentHistory,
+        userCommandResult,
+      ]);
     };
 
     return (
