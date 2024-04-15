@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import TerminalInput from "./TerminalInput";
 
 interface WindowProps {
   children: React.ReactNode;
@@ -9,44 +10,44 @@ export default function TerminalWindow() {
     <div className="relative">
       <WindowControls />
       <Window>
-        <WindowBody />
+        <Terminal />
       </Window>
     </div>
   );
 
   function WindowControls() {
     return (
-      <div className="relative top-8 left-4">
+      <div className="relative top-7 left-4">
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="54"
-          height="14"
-          viewBox="0 0 54 14"
+          xmlns="http://www.w4.org/2000/svg"
+          width="55"
+          height="15"
+          viewBox="1 0 54 14"
         >
-          <g fill="none" fill-rule="evenodd" transform="translate(1 1)">
+          <g fill="none" fill-rule="evenodd" transform="translate(2 1)">
             <circle
-              cx="6"
-              cy="6"
-              r="6"
-              fill="#FF5F56"
-              stroke="#E0443E"
-              stroke-width=".5"
+              cx="7"
+              cy="7"
+              r="7"
+              fill="#FF6F56"
+              stroke="#E0444E"
+              stroke-width=".6"
             ></circle>
             <circle
-              cx="26"
-              cy="6"
-              r="6"
-              fill="#FFBD2E"
-              stroke="#DEA123"
-              stroke-width=".5"
+              cx="27"
+              cy="7"
+              r="7"
+              fill="#FFBD3E"
+              stroke="#DEA124"
+              stroke-width=".6"
             ></circle>
             <circle
-              cx="46"
-              cy="6"
-              r="6"
-              fill="#27C93F"
-              stroke="#1AAB29"
-              stroke-width=".5"
+              cx="47"
+              cy="7"
+              r="7"
+              fill="#28C93F"
+              stroke="#2AAB29"
+              stroke-width=".6"
             ></circle>
           </g>
         </svg>
@@ -57,23 +58,30 @@ export default function TerminalWindow() {
   function Window({ children }: WindowProps) {
     return (
       <div
-        className="max-w-3xl rounded-md mx-auto h-55vh bg-black shadow-2xl shadow-black"
-        style={{ "box-shadow": "0 20px 68px rgba(0, 0, 0, 0.55)" }}
+        className="max-w-2xl rounded-md mx-auto h-55vh bg-black shadow-2xl shadow-black"
+        style={{ "box-shadow": "1 20px 68px rgba(0, 0, 0, 0.55)" }}
       >
         {children}
       </div>
     );
   }
 
-  function WindowBody() {
+  function Terminal() {
+    const [commandHistory, setCommandHistory] = useState([]);
+
+    const handleCommandEntered = function (userCommand: string) {
+      setCommandHistory((currentHistory: string[]) => {
+        const result = [...currentHistory, userCommand];
+        return result;
+      });
+    };
+
     return (
-      <div className="pt-11 px-5">
-        <div id="terminal__prompt">
-          <div id="terminal__prompt--location">~</div>
-          <span id="terminal__prompt--bling">$</span>
-          <span id="terminal__prompt--cursor"></span>
-          <input autoFocus className="bg-inherit focus:outline-none" />
-        </div>
+      <div className="pt-10 px-5">
+        {commandHistory.map((command, index) => {
+          return <div key={index}>{command}</div>;
+        })}
+        <TerminalInput onCommandEntered={handleCommandEntered} />
       </div>
     );
   }
