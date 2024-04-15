@@ -1,9 +1,13 @@
 import Image from "next/image";
-import TerminalWindow from "/src/components/ui/TerminalWindow.tsx";
+import Window from "/src/components/ui/Window.tsx";
+import Terminal from "/src/components/ui/Terminal.tsx";
+
 export default function Home() {
   return (
     <div className="h-screen grid place-items-center">
-      <TerminalWindow />
+      <Window>
+        <Terminal />
+      </Window>
       <Image
         src="/wallpapers/Sonoma.jpg"
         fill
