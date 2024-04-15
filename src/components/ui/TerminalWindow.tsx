@@ -82,7 +82,7 @@ export default function TerminalWindow() {
         cat: <>muestra el contenido de un archivo</>,
       };
       return {
-        command: userCommand,
+        command: command,
         result: results[command] || <>"Comando no encontrado"</>,
       };
     };
