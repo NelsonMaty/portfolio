@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import TerminalInput from "./TerminalInput";
+import BasePrompt from "./BasePrompt";
 
-interface WindowProps {
+type WindowProps = {
   children: React.ReactNode;
-}
+};
 
 export default function TerminalWindow() {
   return (
@@ -66,30 +67,40 @@ export default function TerminalWindow() {
     );
   }
 
+  type CommandResult = {
+    command: string;
+    result: () => React.ReactElement;
+  };
+
   function Terminal() {
-    const [commandHistory, setCommandHistory] = useState([]);
+    const [commandResultHistory, setCommandResultHistory] = useState([]);
+
+    const calculateCommandResult = (command: string) => {
+      const results = {
+        ls: <>retorno lista de archivos</>,
+        cd: <>redirecciona al directorio</>,
+        cat: <>muestra el contenido de un archivo</>,
+      };
+      return {
+        command: userCommand,
+        result: results[command] || <>"Comando no encontrado"</>,
+      };
+    };
 
     const handleCommandEntered = function (userCommand: string) {
-      const calculateCommandResult = (command: string) => {
-        const results = {
-          ls: "retorno lista de archivos",
-          cd: "redirecciona al directorio",
-          cat: "muestra el contenido de un archivo",
-        };
-        return results[command] || "Comando no encontrado";
-      };
-
-      const userCommandResult = calculateCommandResult(userCommand);
-      setCommandHistory((currentHistory: string[]) => [
-        ...currentHistory,
-        userCommandResult,
-      ]);
+      const currentCommandResult = calculateCommandResult(userCommand);
+      setCommandResultHistory((history) => [...history, currentCommandResult]);
     };
 
     return (
       <div className="pt-10 px-5">
-        {commandHistory.map((command, index) => {
-          return <div key={index}>{command}</div>;
+        {commandResultHistory.map((commandResult, index) => {
+          return (
+            <div key={index}>
+              <BasePrompt>{commandResult.command}</BasePrompt>
+              <div>{commandResult.result}</div>
+            </div>
+          );
         })}
         <TerminalInput onCommandEntered={handleCommandEntered} />
       </div>
