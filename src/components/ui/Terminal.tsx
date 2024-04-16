@@ -1,30 +1,22 @@
 import React, { useState } from "react";
 import TerminalInput from "./TerminalInput";
 import CommandResultList from "./CommandResultList";
+import fileTree from "../../data/fileTree";
 
 export default function Terminal() {
   const [commandResultHistory, setCommandResultHistory] = useState([]);
   const [currentPath, setCurrentPath] = useState("");
-  const dummyTree = {
-    "about-me": {
-      "who-am-I.md": "WhoAmI.md",
-      "contact.md": "Contact.md",
-      "education.md": "Education.md",
-      "hobbies.md": "Hobbies.md",
-    },
-    "professional-experiences": {},
-    skills: {},
-    "side-projects": {},
-    "README.md": {},
-  };
 
-  const calculateLsResult = () => (
-    <ul>
-      {Object.keys(dummyTree).map((key) => (
-        <li key={key}>{key}</li>
-      ))}
-    </ul>
-  );
+  const calculateLsResult = () => {
+    const currentTree = currentPath === "" ? fileTree : fileTree[currentPath];
+    return (
+      <ul>
+        {Object.keys(currentTree).map((key) => (
+          <li key={key}>{key}</li>
+        ))}
+      </ul>
+    );
+  };
 
   const calculateCdResult = () => {
     setCurrentPath("/about-me");
