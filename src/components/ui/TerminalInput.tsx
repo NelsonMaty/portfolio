@@ -3,9 +3,13 @@ import BasePrompt from "./BasePrompt";
 
 interface TerminalInputProp {
   onCommandEntered: (cmd: string) => void;
+  currentPath: string;
 }
 
-export default function TerminalInput({ onCommandEntered }: TerminalInputProp) {
+export default function TerminalInput({
+  onCommandEntered,
+  currentPath,
+}: TerminalInputProp) {
   const inputRef = useRef(null);
 
   function handleSubmit(event: KeyboardEvent) {
@@ -16,7 +20,7 @@ export default function TerminalInput({ onCommandEntered }: TerminalInputProp) {
   }
 
   return (
-    <BasePrompt>
+    <BasePrompt path={currentPath}>
       <form onSubmit={handleSubmit} className="inline">
         <input
           autoFocus
