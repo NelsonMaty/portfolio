@@ -38,6 +38,8 @@ export default function Terminal() {
   };
 
   const calculateLsResult = () => {
+    let currentTree = fileTree;
+
     if (currentPath !== "") {
       const pathParts = currentPath.split(".");
       for (const part of pathParts) {
@@ -45,8 +47,6 @@ export default function Terminal() {
           currentTree = currentTree[part];
         }
       }
-    } else {
-      currentTree = fileTree;
     }
     return (
       <ul>
@@ -84,7 +84,7 @@ export default function Terminal() {
       };
 
     return {
-      command: command,
+      command: [command].concat(args).join(" "),
       result: resultCalculator(),
     };
   };
