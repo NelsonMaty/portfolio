@@ -2,8 +2,12 @@ import { useRef } from "react";
 import BasePrompt from "./BasePrompt";
 
 interface TerminalInputProp {
-  onCommandEntered: (cmd: string) => void;
+  onCommandEntered: (cmd: string, args: string[]) => void;
   currentPath: string;
+}
+
+function removeExtraSpaces(input: string) {
+  return input.replace(/\s+/g, " ").trim();
 }
 
 export default function TerminalInput({
@@ -14,8 +18,15 @@ export default function TerminalInput({
 
   function handleSubmit(event: KeyboardEvent) {
     event.preventDefault();
+
     let value = inputRef.current.value;
-    onCommandEntered(value);
+    value = removeExtraSpaces(value);
+
+    const parts = value.split(" ");
+    const command = parts[0];
+    const args = parts.slice(1);
+
+    onCommandEntered(command, args);
     inputRef.current.value = "";
   }
 

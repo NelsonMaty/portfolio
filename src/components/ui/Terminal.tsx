@@ -3,12 +3,51 @@ import TerminalInput from "./TerminalInput";
 import CommandResultList from "./CommandResultList";
 import fileTree from "../../data/fileTree";
 
+function isValidPath(path: string) {
+  return true;
+}
+
 export default function Terminal() {
   const [commandResultHistory, setCommandResultHistory] = useState([]);
   const [currentPath, setCurrentPath] = useState("");
 
+  const rootPath = "~/Nelson M. Ríos/resume";
+
+  function calculateResultingPath(path: string) {
+    let resultingPath;
+    if (path) {
+      if (currentPath === "") {
+        resultingPath = path;
+      } else {
+        resultingPath = currentPath + "/" + path;
+      }
+    } else {
+      resultingPath = "";
+    }
+    return resultingPath;
+  }
+
+  const calculateCdResult = (args: string[]) => {
+    let resultingPath = calculateResultingPath(args[0]);
+    if (isValidPath(resultingPath)) {
+      setCurrentPath(resultingPath);
+      return <div></div>;
+    } else {
+      return <div> cd: {resultingPath}: No such file or directory </div>;
+    }
+  };
+
   const calculateLsResult = () => {
-    const currentTree = currentPath === "" ? fileTree : fileTree[currentPath];
+    if (currentPath !== "") {
+      const pathParts = currentPath.split(".");
+      for (const part of pathParts) {
+        if (currentTree[part]) {
+          currentTree = currentTree[part];
+        }
+      }
+    } else {
+      currentTree = fileTree;
+    }
     return (
       <ul>
         {Object.keys(currentTree).map((key) => (
@@ -18,12 +57,7 @@ export default function Terminal() {
     );
   };
 
-  const calculateCdResult = () => {
-    setCurrentPath("/about-me");
-    return <div></div>;
-  };
-
-  const calculateCatResult = () => {
+  const calculateCatResult = (args: string[]) => {
     return <div>hago que muestro el contenido</div>;
   };
 
@@ -31,15 +65,20 @@ export default function Terminal() {
     return null;
   };
 
-  const calculateCommandResult = (command: string) => {
+  const calculatePwdResult = () => {
+    return <div>{rootPath + "/" + currentPath}</div>;
+  };
+
+  const calculateCommandResult = (command: string, args: string[]) => {
     const commandHandlers = {
       ls: calculateLsResult,
       cd: calculateCdResult,
       cat: calculateCatResult,
+      pwd: calculatePwdResult,
     };
 
     const resultCalculator =
-      commandHandlers[command] ||
+      commandHandlers[command].bind(null, args) ||
       function () {
         return "Command not found: " + command;
       };
@@ -50,13 +89,13 @@ export default function Terminal() {
     };
   };
 
-  const handleCommandEntered = function (userCommand: string) {
-    if (userCommand === "clear") {
+  const handleCommandEntered = function (command: string, args: string[]) {
+    if (command === "clear") {
       setCommandResultHistory([]);
     } else {
       setCommandResultHistory((history) => [
         ...history,
-        calculateCommandResult(userCommand),
+        calculateCommandResult(command, args),
       ]);
     }
   };
@@ -66,7 +105,7 @@ export default function Terminal() {
       <CommandResultList list={commandResultHistory} />
       <TerminalInput
         onCommandEntered={handleCommandEntered}
-        currentPath={currentPath}
+        currentPath={rootPath + "/" + currentPath}
       />
     </div>
   );
