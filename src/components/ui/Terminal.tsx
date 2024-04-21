@@ -10,8 +10,15 @@ import {
 
 const rootPath = "~/Nelson M. Ríos/resume";
 
+type CommandResult = {
+  command: string;
+  result: React.ReactNode;
+};
+
 export default function Terminal() {
-  const [commandResultHistory, setCommandResultHistory] = useState([]);
+  const [commandResultHistory, setCommandResultHistory] = useState<
+    CommandResult[]
+  >([]);
   const [currentPath, setCurrentPath] = useState("");
 
   const calculateCommandResult = (command: string, args: string[]) => {
@@ -24,19 +31,18 @@ export default function Terminal() {
     const calculatorParameters = {
       args,
       currentPath,
-      onPathChanged: (path) => {
+      onPathChanged: (path: string) => {
         setCurrentPath(path);
       },
     };
     const resultCalculator =
-      commandHandlers[command].bind(null, calculatorParameters) ||
+      commandHandlers[command as keyof typeof commandHandlers] ||
       function () {
         return "Command not found: " + command;
       };
-    const result = resultCalculator();
     return {
       command: [command].concat(args).join(" "),
-      result: resultCalculator(),
+      result: resultCalculator(calculatorParameters),
     };
   };
 
