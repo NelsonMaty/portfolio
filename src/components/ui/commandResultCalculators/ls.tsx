@@ -1,8 +1,11 @@
 import fileTree from "../../../data/fileTree";
-import type { CalculatorProps } from "./calculatorTypes";
+import { useContext } from "react";
+import { CurrentPathContext } from "@/contexts/CurrentPathContext";
 
-const calculateLsResult = ({ currentPath }: CalculatorProps) => {
+const CalculateLsResult = () => {
   let currentTree = fileTree;
+
+  const { currentPath } = useContext(CurrentPathContext);
 
   if (currentPath !== "") {
     const pathParts = currentPath.split(".");
@@ -22,4 +25,4 @@ const calculateLsResult = ({ currentPath }: CalculatorProps) => {
   );
 };
 
-export { calculateLsResult };
+export { CalculateLsResult };

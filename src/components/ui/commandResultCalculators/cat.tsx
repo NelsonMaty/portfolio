@@ -1,5 +1,5 @@
-const calculateCatResult = (args: string[]) => {
+const CalculateCatResult = () => {
   return <div>hago que muestro el contenido</div>;
 };
 
-export { calculateCatResult };
+export { CalculateCatResult };
