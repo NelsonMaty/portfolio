@@ -15,7 +15,7 @@ export default function Home() {
           fill
           sizes="100vw"
           alt="background image"
-          objectFit="cover"
+          style={{ objectFit: "cover", objectPosition: "center" }}
           className="-z-10"
         />
       </div>
