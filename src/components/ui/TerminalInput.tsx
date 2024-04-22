@@ -1,8 +1,7 @@
 import { useRef, useContext } from "react";
 import BasePrompt from "./BasePrompt";
 import { CurrentPathContext } from "@/contexts/CurrentPathContext";
-
-const rootPath = "~/Nelson M. Ríos/resume";
+import { rootPath } from "@/data/rootPath";
 
 interface TerminalInputProp {
   onCommandEntered: (cmd: string, args: string[]) => void;
@@ -14,7 +13,9 @@ function removeExtraSpaces(input: string) {
 
 export default function TerminalInput({ onCommandEntered }: TerminalInputProp) {
   const inputRef = useRef<HTMLInputElement>(null);
-  let { currentPath } = useContext(CurrentPathContext);
+  const { currentPath } = useContext(CurrentPathContext);
+  const resultingPath =
+    currentPath !== "" ? rootPath + "/" + currentPath : rootPath;
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,7 +33,7 @@ export default function TerminalInput({ onCommandEntered }: TerminalInputProp) {
   }
 
   return (
-    <BasePrompt path={rootPath + currentPath}>
+    <BasePrompt path={resultingPath}>
       <form onSubmit={handleSubmit} className="inline">
         <input
           autoFocus

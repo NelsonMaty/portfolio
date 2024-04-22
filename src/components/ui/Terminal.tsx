@@ -7,6 +7,8 @@ import {
   CalculateCatResult,
   CalculateCdResult,
 } from "./commandResultCalculators";
+import { useContext } from "react";
+import { CurrentPathContext } from "@/contexts/CurrentPathContext";
 
 type CommandResult = {
   command: string;
@@ -17,6 +19,8 @@ export default function Terminal() {
   const [commandResultHistory, setCommandResultHistory] = useState<
     CommandResult[]
   >([]);
+
+  const { currentPath } = useContext(CurrentPathContext);
 
   const calculateCommandResult = (command: string, args: string[]) => {
     const commandHandlers = {
@@ -31,6 +35,7 @@ export default function Terminal() {
         return "Command not found: " + command;
       };
     return {
+      path: currentPath,
       command: [command].concat(args).join(" "),
       result: resultCalculator(args),
     };

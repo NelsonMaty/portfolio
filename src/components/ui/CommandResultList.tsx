@@ -1,24 +1,28 @@
 import BasePrompt from "./BasePrompt";
+import { rootPath } from "@/data/rootPath";
 
-type CommandResult = {
+type CommandResultType = {
+  path: string;
   command: string;
   result: React.ReactNode;
 };
 
 type CommandResultListProps = {
-  list: CommandResult[];
+  list: CommandResultType[];
 };
 
 export default function CommandResultList({ list }: CommandResultListProps) {
   return (
     <>
-      {list.map((commandResult: CommandResult, index: number) => {
+      {list.map((commandResult: CommandResultType, index: number) => {
+        const { command, result, path } = commandResult;
+        const resultingPath = path !== "" ? rootPath + "/" + path : rootPath;
         return (
           <div key={index}>
-            <BasePrompt path={"hola"}>
-              <>{commandResult.command}</>
+            <BasePrompt path={resultingPath}>
+              <>{command}</>
             </BasePrompt>
-            <div>{commandResult.result}</div>
+            <div>{result}</div>
           </div>
         );
       })}
