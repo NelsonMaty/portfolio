@@ -3,15 +3,16 @@ import { useContext } from "react";
 import { CurrentPathContext } from "@/contexts/CurrentPathContext";
 
 const CalculateLsResult = () => {
-  let currentTree = fileTree;
+  let currentTree: Object = fileTree;
 
   const { currentPath } = useContext(CurrentPathContext);
 
   if (currentPath !== "") {
     const pathParts = currentPath.split(".");
     for (const part of pathParts) {
-      if (currentTree[part]) {
-        currentTree = currentTree[part];
+      type ValidPath = keyof typeof currentTree;
+      if (currentTree[part as ValidPath] === undefined) {
+        currentTree = currentTree[part as ValidPath];
       }
     }
   }

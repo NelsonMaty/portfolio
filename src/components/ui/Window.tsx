@@ -1,8 +1,6 @@
-type WindowProps = {
-  children: React.ReactNode;
-};
+import { PropsWithChildren, CSSProperties } from "react";
 
-export default function Window({ children }: WindowProps) {
+export default function Window({ children }: PropsWithChildren) {
   return (
     <div className="relative">
       <WindowControls />
@@ -50,11 +48,15 @@ export default function Window({ children }: WindowProps) {
     );
   }
 
-  function WindowFrame({ children }: WindowProps) {
+  function WindowFrame({ children }: PropsWithChildren) {
     return (
       <div
         className="max-w-2xl rounded-md mx-auto h-55vh bg-black shadow-2xl shadow-black"
-        style={{ "box-shadow": "1 20px 68px rgba(0, 0, 0, 0.55)" }}
+        style={
+          {
+            "box-shadow": "1 20px 68px rgba(0, 0, 0, 0.55)",
+          } as CSSProperties
+        }
       >
         {children}
       </div>

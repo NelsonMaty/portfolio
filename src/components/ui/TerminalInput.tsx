@@ -13,20 +13,22 @@ function removeExtraSpaces(input: string) {
 }
 
 export default function TerminalInput({ onCommandEntered }: TerminalInputProp) {
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   let { currentPath } = useContext(CurrentPathContext);
-  function handleSubmit(event: KeyboardEvent) {
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const input = inputRef.current;
 
-    let value = inputRef.current.value;
-    value = removeExtraSpaces(value);
+    if (input) {
+      const value = removeExtraSpaces(input.value);
+      const parts = value.split(" ");
+      const command = parts[0];
+      const args = parts.slice(1);
 
-    const parts = value.split(" ");
-    const command = parts[0];
-    const args = parts.slice(1);
-
-    onCommandEntered(command, args);
-    inputRef.current.value = "";
+      onCommandEntered(command, args);
+      inputRef.current.value = "";
+    }
   }
 
   return (
