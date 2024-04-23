@@ -4,7 +4,7 @@ import { CurrentPathContext } from "@/contexts/CurrentPathContext";
 function calculateResultingPath(currentPath: string, args: string[]) {
   let resultingPath;
   const path = args ? args[0] : "";
-  if (path) {
+  if (path && path !== "~") {
     if (currentPath === "") {
       resultingPath = path;
     } else {
