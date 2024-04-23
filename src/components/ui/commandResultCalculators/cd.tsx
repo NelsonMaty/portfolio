@@ -1,19 +1,51 @@
 import { useContext } from "react";
 import { CurrentPathContext } from "@/contexts/CurrentPathContext";
 
-function calculateResultingPath(currentPath: string, args: string[]) {
+function calculateResultingPath(currentPath: string, args: string[]): string {
+  let targetPath = args[0] || "";
   let resultingPath;
-  const path = args ? args[0] : "";
-  if (path && path !== "~") {
-    if (currentPath === "") {
-      resultingPath = path;
-    } else {
-      resultingPath = currentPath + "/" + path;
-    }
-  } else {
+
+  if (targetPath == "") {
     resultingPath = "";
+  } else if (targetPath === "-") {
+    //TODO: handle -
+  } else if (targetPath === ".") {
+    resultingPath = currentPath;
+  } else if (targetPath === "..") {
+    if (currentPath.includes("/")) {
+      resultingPath = currentPath.slice(0, currentPath.lastIndexOf("/"));
+    } else {
+      resultingPath = "";
+    }
+  } else if (targetPath.startsWith("../")) {
+    let parts = targetPath.split("/");
+    while (parts[0] === "..") {
+      if (currentPath.includes("/")) {
+        currentPath = currentPath.slice(0, currentPath.lastIndexOf("/"));
+      } else {
+        currentPath = "";
+      }
+      parts.shift();
+    }
+    if (parts.length > 0) {
+      resultingPath = currentPath + "/" + parts.join("/");
+    } else {
+      resultingPath = currentPath;
+    }
+  } else if (targetPath === "~") {
+    resultingPath = "";
+  } else if (targetPath.startsWith("~/")) {
+    currentPath = "";
+    resultingPath = targetPath.slice(2);
+  } else {
+    if (currentPath === "") {
+      resultingPath = targetPath;
+    } else {
+      resultingPath = currentPath + "/" + targetPath;
+    }
   }
-  return resultingPath;
+
+  return resultingPath || "";
 }
 
 function isValidPath(path: string) {
