@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { CurrentPathContext } from "@/contexts/CurrentPathContext";
 
 type CommandResult = {
+  path: string;
   command: string;
   result: React.ReactNode;
 };
@@ -24,7 +25,7 @@ export default function Terminal() {
   const calculateCommandResult = (command: string, args: string[]) => {
     const commandHandlers = {
       ls: () => <CalculateLsResult />,
-      cd: (args) => <CalculateCdResult {...args} />,
+      cd: (args: string[]) => <CalculateCdResult {...args} />,
       cat: () => <CalculateCatResult />,
       pwd: () => <CalculatePwdResult />,
     };
