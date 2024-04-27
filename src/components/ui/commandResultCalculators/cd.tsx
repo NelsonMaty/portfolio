@@ -49,6 +49,7 @@ function calculateResultingPath(currentPath: string, args: string[]): string {
 }
 
 function isValidPath(path: string) {
+  //TODO: implement
   return true;
 }
 
