@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, memo } from "react";
 import { CurrentPathContext } from "@/contexts/CurrentPathContext";
 
 function calculateResultingPath(currentPath: string, args: string[]): string {
@@ -8,7 +8,7 @@ function calculateResultingPath(currentPath: string, args: string[]): string {
   if (targetPath == "") {
     resultingPath = "";
   } else if (targetPath === "-") {
-    //TODO: handle -
+    resultingPath = window.previousPath;
   } else if (targetPath === ".") {
     resultingPath = currentPath;
   } else if (targetPath === "..") {
@@ -52,12 +52,13 @@ function isValidPath(path: string) {
   return true;
 }
 
-const CalculateCdResult = (args: string[]) => {
+const CalculateCdResult = memo((args: string[]) => {
   const { currentPath, setCurrentPath } = useContext(CurrentPathContext);
   const resultingPath = calculateResultingPath(currentPath, args);
 
   useEffect(() => {
     if (isValidPath(resultingPath)) {
+      window.previousPath = currentPath;
       setCurrentPath(resultingPath);
     }
   }, []);
@@ -67,6 +68,6 @@ const CalculateCdResult = (args: string[]) => {
   } else {
     return <div> cd: {resultingPath}: No such file or directory </div>;
   }
-};
+});
 
 export { CalculateCdResult };
