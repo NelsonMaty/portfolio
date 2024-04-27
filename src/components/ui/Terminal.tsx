@@ -19,16 +19,16 @@ export default function Terminal() {
   const [commandResultHistory, setCommandResultHistory] = useState<
     CommandResult[]
   >([]);
-
   const { currentPath } = useContext(CurrentPathContext);
 
   const calculateCommandResult = (command: string, args: string[]) => {
     const commandHandlers = {
-      ls: CalculateLsResult,
-      cd: CalculateCdResult,
-      cat: CalculateCatResult,
-      pwd: CalculatePwdResult,
+      ls: () => <CalculateLsResult />,
+      cd: (args) => <CalculateCdResult {...args} />,
+      cat: () => <CalculateCatResult />,
+      pwd: () => <CalculatePwdResult />,
     };
+
     const resultCalculator =
       commandHandlers[command as keyof typeof commandHandlers] ||
       function () {
