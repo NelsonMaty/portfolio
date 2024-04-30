@@ -51,7 +51,7 @@ export default function Window({ children }: PropsWithChildren) {
   function WindowFrame({ children }: PropsWithChildren) {
     return (
       <div
-        className="max-w-2xl rounded-md mx-auto h-55vh bg-black shadow-2xl shadow-black"
+        className="bg-background max-w-2xl rounded-md mx-auto h-55vh shadow-2xl shadow-black"
         style={
           {
             boxShadow: "1 20px 68px rgba(0, 0, 0, 0.55)",
